@@ -9,6 +9,8 @@ Er He Yang
 Supervisor:
 Assoc. Prof. Anwitaman Datta - anwitaman@ntu.edu.sg
 
+For more information, please go to: http://myexpressions.in/projects.html#CC
+
 School of Computer Engineering
 Nanyang Technological University
 --------------------------------------------------------------------------------------
