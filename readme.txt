@@ -4,9 +4,13 @@ Budhaditya Bhattacharya
 Adarsh Kanodia
 Nishtha Malhotra
 Nishant Chemburkar
+Er He Yang
 
 Supervisor:
 Assoc. Prof. Anwitaman Datta - anwitaman@ntu.edu.sg
+
+School of Computer Engineering
+Nanyang Technological University
 --------------------------------------------------------------------------------------
 
 READ ME
