@@ -1,0 +1,1025 @@
+<html>
+
+<head>
+
+<title>Formula Builder</title>
+
+<script src="SpryAssets/SpryMenuBar.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+//Re create the formula in the preview area from the new code
+function change()
+
+{document.getElementById("preview").innerHTML="\\["+document.getElementById("textb").value+"\\]";
+
+ MathJax.Hub.Typeset();
+
+}
+
+function finalize()
+//Display the final code to be used by the user//
+{x=document.getElementById("textb").value;
+
+ t="<div id='Preview'><h3>Your Formula is ready <br> Copy paste the following code into your post</h3><center><p class='final'>";
+
+ if(document.getElementById("inline").checked)
+
+ 	t+="\\("+x+"\\)</p></center></div>";
+
+ else
+
+    t+="\\["+x+"\\]</p></center></div>";
+
+ document.getElementById("constructor").innerHTML=t;
+
+}
+//Code to insert the equivalent latex markup at the cursor position in the text box
+function insertAtCursor(myField, myValue) {
+
+//IE support
+
+if (document.selection) {
+
+myField.focus();
+
+sel = document.selection.createRange();
+
+sel.text = myValue;
+
+}
+
+//MOZILLA/NETSCAPE support
+
+else if (myField.selectionStart || myField.selectionStart == '0') {
+
+var startPos = myField.selectionStart;
+
+var endPos = myField.selectionEnd;
+
+myField.value = myField.value.substring(0, startPos)
+
++ myValue
+
++ myField.value.substring(endPos, myField.value.length);
+
+myField.setSelectionRange(startPos, startPos);
+
+} else {
+
+myField.value += myValue;
+
+}
+
+myField.focus();
+
+}
+
+</script>
+
+<script type="text/javascript"
+
+  src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+//Open source Library used to generate LATEX markup
+   MathJax.Hub.Config({
+
+     extensions: ["tex2jax.js","TeX/AMSmath.js","TeX/AMSsymbols.js"],
+
+     jax: ["input/TeX","output/HTML-CSS"],
+
+     tex2jax: {inlineMath: [["\\(","\\)"]],  processEscapes: true, ignoreClass: "tex2jax_ignore|final"}
+
+   });
+
+ </script>
+
+<link href="SpryAssets/SpryMenuBarHorizontal.css" rel="stylesheet" type="text/css">
+
+<style type="text/css">
+
+#textb {
+
+	height: 50px;
+
+	width: 512px;
+
+	filter: Glow(Color="blue", Strength="10");
+
+}
+
+.button:hover, .MenuBarItemSubmenu:hover{
+
+	color: #FFF;
+
+	background-color: #03C;
+
+}
+
+table a{
+
+	width: 2.7em;
+
+	height:1.5em;
+
+	-webkit-border-radius: 5px;
+
+	-moz-border-radius: 5px;
+
+	border-radius: 5px;
+
+	-webkit-box-shadow: 4px 4px 9px rgba(50, 50, 49, 0.75);
+
+	-moz-box-shadow:    4px 4px 9px rgba(50, 50, 49, 0.75);
+
+	box-shadow:         4px 4px 9px rgba(50, 50, 49, 0.75);
+
+	text-align: center;
+
+}
+
+#g, #g li, #bo, #bo li, #general, #general li, #lop, #lop li, #misc, #misc li, #relational, #relational li, #calculus, #calculus li, #chem, #chem li{
+
+	width:auto
+
+}
+
+#general table a{
+
+	width: 1.2em;
+
+	height:1em;
+
+}
+
+#lop table a{
+
+	width: 2.2em;
+
+	height:1.2em;
+
+}
+
+#misc table a{
+
+	width: 1.5em;
+
+	height:1.2em;
+
+}
+
+#relational table a{
+
+	width: 1em;
+
+	height:0.8em;
+
+}
+
+#bo table a{
+
+	width: 1em;
+
+	height:0.8em;
+
+}
+
+#calculus table a{
+
+	width: 2.7em;
+
+	height:1.5em;
+
+}
+
+#chem table a{
+
+	width: 1.8em;
+
+	height:1.8em;
+
+}
+
+#g table a{
+
+	width: 1em;
+
+	height:0.8em;
+
+}
+
+#Preview {
+
+	text-align: center;
+
+	vertical-align: middle;
+
+	padding: 20px;
+
+	float: none;
+
+	height: auto;
+
+	display:table;
+
+	width:auto;
+
+	background: #f9fcf7; /* Old browsers */
+
+/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+
+background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y5ZmNmNyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmNWY5ZjAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+
+background: -moz-linear-gradient(top,  #f9fcf7 0%, #f5f9f0 100%); /* FF3.6+ */
+
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f9fcf7), color-stop(100%,#f5f9f0)); /* Chrome,Safari4+ */
+
+background: -webkit-linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%); /* Chrome10+,Safari5.1+ */
+
+background: -o-linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%); /* Opera 11.10+ */
+
+background: -ms-linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%); /* IE10+ */
+
+background: linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%); /* W3C */
+
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9fcf7', endColorstr='#f5f9f0',GradientType=0 ); /* IE6-8 */
+
+}
+
+.final {
+
+	text-align: center;
+
+	vertical-align: middle;
+
+	display: table;
+
+	padding: 20px;
+
+	float: none;
+
+	height: auto;
+
+	width: auto;
+
+	background: #f9fcf7; /* Old browsers */
+
+/* IE9 SVG, needs conditional override of 'filter' to 'none' */
+
+background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2Y5ZmNmNyIgc3RvcC1vcGFjaXR5PSIxIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiNmNWY5ZjAiIHN0b3Atb3BhY2l0eT0iMSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+
+background: -moz-linear-gradient(top,  #f9fcf7 0%, #f5f9f0 100%); /* FF3.6+ */
+
+background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,#f9fcf7), color-stop(100%,#f5f9f0)); /* Chrome,Safari4+ */
+
+background: -webkit-linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%); /* Chrome10+,Safari5.1+ */
+
+background: -o-linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%); /* Opera 11.10+ */
+
+background: -ms-linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%); /* IE10+ */
+
+background: linear-gradient(top,  #f9fcf7 0%,#f5f9f0 100%); /* W3C */
+
+filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f9fcf7', endColorstr='#f5f9f0',GradientType=0 ); /* IE6-8 */
+
+}
+
+body {overflow:scroll;
+
+background:#F7F7F7;
+
+padding:20px;
+
+}
+
+h1 {
+
+ font:normal 40pt Arial;
+
+ color:#FFFFFF;
+
+ text-shadow: 0 1px 0 #ccc,
+
+ 0 2px 0 #c9c9c9,
+
+ 0 3px 0 #bbb,
+
+ 0 4px 0 #b9b9b9,
+
+ 0 5px 0 #aaa,
+
+ 0 6px 1px rgba(0,0,0,.1),
+
+ 0 0 5px rgba(0,0,0,.1),
+
+ 0 1px 3px rgba(0,0,0,.3),
+
+ 0 3px 5px rgba(0,0,0,.2),
+
+ 0 5px 10px rgba(0,0,0,.25),
+
+ 0 10px 10px rgba(0,0,0,.2),
+
+ 0 20px 20px rgba(0,0,0,.15);
+
+	
+
+}
+
+h3 {
+
+  font-family: 'Century Gothic', sans-serif;
+
+    font-size: 25px;
+
+	color: #1a1a1a;
+
+	font-weight: normal;
+
+	margin-top: -5px;
+
+	margin-bottom: -10px;
+
+   }
+
+</style>
+
+<head>
+
+<body>
+
+<div id="constructor">
+
+<div id="Preview">
+
+<header>
+
+<h3>Preview</h3>
+
+</header>
+<!-- the Preview of the generated formula -->
+<p id="preview">
+
+  $$x = {-b \pm \sqrt{b^2-4ac} \over 2a}.$$
+
+</p>
+
+</div>
+
+<br>
+
+<div style="width:37em">
+<!-- the code which is being used -->
+  <input name="" type="text" id="textb" size="50" value="x = {-b \pm \sqrt{b^2-4ac} \over 2a}."><table style="float:right"><tr><td>
+
+<input type="button" value="Preview" onClick="change()"></td></tr><tr><td>
+
+<input type="button" value="Finalize" onClick="finalize()"></td></tr></table>
+
+</div><div style='clear: both;'></div>
+<!-- An interactive list with all the mathematical symbols in clickable fashion to add a expression -->
+<ul type="circle" class="MenuBarHorizontal" id="MenuBar1">
+
+  <li><a class="MenuBarItemSubmenu">Greek Letters</a>
+
+    <ul>
+
+    <li><a class="MenuBarItemSubmenu">Lower Case</a>
+
+    <ul id="g">
+
+        <li><a><table>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\beta}')">\(\beta\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\alpha}')">\(\alpha\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\gamma}')">\(\gamma\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\phi}')">\(\phi\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\omega}')">\(\omega\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\delta}')">\(\delta\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\epsilon}')">\(\epsilon\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\mu}')">\(\mu\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\eta}')">\(\eta\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\sigma}')">\(\sigma\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\iota}')">\(\iota\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\nu}')">\(\nu\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\chi}')">\(\chi\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\vartheta}')">\(\vartheta\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\varphi}')">\(\varphi\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\zeta}')">\(\zeta\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\kappa}')">\(\kappa\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\xi}')">\(\xi\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\tau}')">\(\tau\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\psi}')">\(\psi\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\varpi}')">\(\varpi\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\lampda}')">\(\lambda\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\upsilon}')">\(\upsilon\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\varrho}')">\(\varrho\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\theta}')">\(\theta\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\rho}')">\(\rho\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\varepsilon}')">\(\varepsilon\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\varsigma}')">\(\varsigma\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\eta}')">\(\eta\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\aleph}')">\(\aleph\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\beth}')">\(\beth\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\daleth}')">\(\daleth\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\gimel}')">\(\gimel\)</a></td>
+
+          <td></td>
+
+          <td></td>
+
+          </tr>
+
+        </table></a></li>
+
+    </ul>
+
+  </li>
+
+  <li><a class="MenuBarItemSubmenu">Upper Case</a>
+
+    <ul id="g">
+
+        <li><a><table>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\Delta}')">\(\Delta\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\Xi}')">\(\Xi\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\Phi}')">\(\Phi\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\Pi}')">\(\Pi\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\Sigma}')">\(\Sigma\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\Lambda}')">\(\Lambda\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\Upsilon}')">\(\Upsilon\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\Gamma}')">\(\Gamma\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\Psi}')">\(\Psi\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\Theta}')">\(\Theta\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\Omega}')">\(\Omega\)</a></td>
+
+          <td></td>
+
+          </tr>
+
+         </table></a></li>
+
+    </ul>
+
+  </li>
+
+  </ul>
+
+  </li>
+
+  <li><a class="MenuBarItemSubmenu">Mathematics</a>
+
+    <ul>
+
+      <li><a class="MenuBarItemSubmenu">Binary Operators</a>
+
+    	<ul id="bo">
+
+        <li><a><table>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\pm}')">\({\pm}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\mp}')">\({\mp}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\setminus}')">\({\setminus}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\cdot}')">\({\cdot}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\times}')">\({\times}\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\ast}')">\({\ast}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\star}')">\({\star}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\diamond}')">\({\diamond}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\circ}')">\({\circ}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\bullet}')">\({\bullet}\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\div}')">\({\div}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\cap}')">\({\cap}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\cup}')">\({\cup}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\uplus}')">\({\uplus}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\sqcap}')">\({\sqcap}\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\sqcup}')">\({\sqcup}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\triangleleft}')">\({\triangleleft}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\triangleright}')">\({\triangleright}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\wr}')">\({\wr}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\bigcirc}')">\({\bigcirc}\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\bigtriangleup}')">\({\bigtriangleup}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\bigtriangledown}')">\({\bigtriangledown}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\vee}')">\({\vee}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\wedge}')">\({\wedge}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\oplus}')">\({\oplus}\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\ominus}')">\({\ominus}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\otimes}')">\({\otimes}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\oslash}')">\({\oslash}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\odot}')">\({\odot}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\dagger}')">\({\dagger}\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\ddagger}')">\({\ddagger}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\amalg}')">\({\amalg}\)</a></td>
+
+          <td></td>
+
+          <td></td>
+
+          <td></td>
+
+          </tr>
+
+          </table></a></li>
+
+        </ul>
+
+      </li>
+
+      <li><a class="MenuBarItemSubmenu">Relational Operators</a>
+
+    	<ul id="relational">
+
+          <li><a><table>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\ne}')">\({\ne}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\leq}')">\({\leq}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\geq}')">\({\geq}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\equiv}')">\({\equiv}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\prec}')">\({\prec}\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\succ}')">\({\succ}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\propto}')">\({\propto}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\vdash}')">\({\vdash}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\perp}')">\({\perp}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\doteq}')">\({\doteq}\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\parallel}')">\({\parallel}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\mid}')">\({\mid}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\smile}')">\({\smile}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\models}')">\({\models}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\dashv}')">\({\dashv}\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\propto}')">\({\propto}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\ni}')">\({\ni}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\in}')">\({\in}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\sqsupseteq}')">\({\sqsupseteq}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\bowtie}')">\({\bowtie}\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\frown}')">\({\frown}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\cong}')">\({\cong}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\supseteq}')">\({\supseteq}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\subseteq}')">\({\subseteq}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\approx}')">\({\approx}\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\supset}')">\({\supset}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\subset}')">\({\subset}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\asymp}')">\({\asymp}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\gg}')">\({\gg}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\ll}')">\({\ll}\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\simeq}')">\({\simeq}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\succeq}')">\({\succeq}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\preceq}')">\({\preceq}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\sim}')">\({\sim}\)</a></td>
+
+          <td></td>
+
+          </tr>
+
+          </table>
+
+          </a>
+
+          </li>
+
+        </ul>
+
+      </li>
+
+      <li><a class="MenuBarItemSubmenu">General</a>
+
+    	<ul id="general">
+
+           <li><a><table>
+
+           <tr>
+
+           <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{a^b}')">\({a^b}\)</a></td>
+
+           <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'\\sqrt[b]{a}')">\(\sqrt[b]{a}\)</a></td>
+
+           <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'\\frac{a}{b}')">\(\frac{a}{b}\)</a></td>
+
+           </tr>
+
+           <tr>
+
+           <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\pi}')">\(\pi\)</a></td>
+
+           <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\infty}')">\(\infty\)</a></td>
+
+           <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\angle}')">\(\angle\)</a></td>
+
+           </tr>
+
+           <tr>
+
+           <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\forall}')">\(\forall\)</a></td>
+
+           <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\exists}')">\(\exists\)</a></td>
+
+           <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\neg}')">\(\neg\)</a></td>
+
+           </tr>
+
+           </table></a></li>
+
+      	</ul>
+
+      </li>
+
+      <li><a class="MenuBarItemSubmenu">Large Operators</a>
+
+    	<ul id="lop">
+
+          <li><a><table>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'\\sum_{x=a}^{b}')">\(\sum_{x=a}^{b}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'\\prod_{x=a}^{b}')">\(\prod_{x=a}^{b}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\coprod}')">\(\coprod\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\biguplus}')">\(\biguplus\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\bigcap}')">\(\bigcap\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\bigcup}')">\(\bigcup\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\bigotimes}')">\(\bigotimes\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\bigoplus}')">\(\bigoplus\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\bigodot}')">\(\bigodot\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\bigvee}')">\(\bigvee\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\bigwedge}')">\(\bigwedge\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\bigsqcup}')">\(\bigsqcup\)</a></td>
+
+          </tr>
+
+          </table></a></li>
+
+      	</ul>
+
+      </li>
+
+      <li><a class="MenuBarItemSubmenu">Calculus</a>
+
+        <ul id="calculus">
+
+          <li><a><table>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\partial}')">\(\partial \)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\int}')">\(\int \)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'\\int_{a}^{b}')">\(\int_{a}^{b}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'\\oint_{a}^{b}')">\(\oint_{a}^{b}\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'\\lim_{{a}\\to{b}}')">\(\lim_{{a}\to{b}}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\iint}')">\(\iint \)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\iiint}')">\(\iiint \)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{\\iiiint}')">\(\iiiint \)</a></td>
+
+          </tr></table></a></li>
+
+       </ul>
+
+      </li>
+
+      </ul>
+
+  </li>
+
+   <li><a class="MenuBarItemSubmenu">Chemistry</a>
+
+    <ul id="chem">
+
+      <li><a><table>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{^{a}_{b}{H}_{d}}')">\({^{a}_{b}{H}_{d}}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'\\xrightarrow[b]{a}')">\(\xrightarrow[b]{a}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'\\xleftarrow[b]{a}')">\(\xleftarrow[b]{a}\)</a></td>
+
+          </tr>
+
+          <tr>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'{a_b}')">\(a_b\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'\\mathop{\\leftrightharpoons}^{k_1}_{k_2}')">\(\mathop{\leftrightharpoons}^{k_1}_{k_2}\)</a></td>
+
+          <td><a class="button" onClick="insertAtCursor(document.getElementById('textb'),'G^o')">\(G^o\)</a></td>
+
+          <td></td>
+
+          </tr>
+
+       </table></a></li>
+
+   </ul>
+
+  </li>
+
+  <li><a class="MenuBarItemSubmenu">Misc</a>
+
+    <ul id="misc">
+
+     <li><a><table>
+
+         <tr>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'\\overline{a}')">\(\overline{a}\)</a></td>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'\\underline{a')">\(\underline{a}\)</a></td>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'\\overbrace{a}')">\(\overbrace{a}\)</a></td>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'\\underbrace{a}')">\(\underbrace{a}\)</a></td>
+
+         </tr>
+
+         <tr>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'\\check{a}')">\(\check{a}\)</a></td>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'\\hat{a}')">\(\hat{a}\)</a></td>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'\\bar{a}')">\(\bar{a}\)</a></td>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'\\vec{a}')">\(\vec{a}\)</a></td>
+
+         </tr>
+
+         <tr>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'\\dot{a}')">\(\dot{a}\)</a></td>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'\\ddot{a}')">\(\ddot{a}\)</a></td>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'{a_b}')">\(a_b\)</a></td>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'\\{\\}')">\(\{\}\)</a></td>
+
+         </tr>
+
+         <tr>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'{\\rightarrow}')">\({\rightarrow}\)</a></td>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'{\\leftarrow}')">\({\leftarrow}\)</a></td>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'{\\Rightarrow}')">\({\Rightarrow}\)</a></td>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'{\\Leftarrow}')">\({\Leftarrow}\)</a></td>
+
+         </tr>
+
+         <tr>
+
+         <td><a onClick="insertAtCursor(document.getElementById('textb'),'{\\Leftrightarrow}')">\({\Leftrightarrow}\)</a></td>
+
+         <td></td>
+
+         <td></td>
+
+         <td></td>
+
+         </tr>
+
+      </table></a></li>
+
+   </ul>
+
+  </li>
+
+</ul>
+
+<script type="text/javascript">
+
+var MenuBar1 = new Spry.Widget.MenuBar("MenuBar1", {imgDown:"SpryAssets/SpryMenuBarDownHover.gif", imgRight:"SpryAssets/SpryMenuBarRightHover.gif"});
+
+</script>
+
+<br>
+<!-- the user indicates whether he wants his formula to be inline -->
+<input id="inline" type="checkbox">Inline
+
+</div>
+
+</body>
+
+</html>
